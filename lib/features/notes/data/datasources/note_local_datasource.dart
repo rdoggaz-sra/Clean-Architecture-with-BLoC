@@ -24,4 +24,15 @@ class NoteLocalDataSource {
       whereArgs: [id],
     );
   }
+
+  Future<void> updateNote(NoteModel note) async {
+    final db = await dbHelper.database;
+
+    await db.update(
+      'notes',
+      note.toMap(),
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
+  }
 }

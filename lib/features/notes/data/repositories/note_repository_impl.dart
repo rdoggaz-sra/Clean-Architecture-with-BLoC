@@ -22,4 +22,11 @@ class NoteRepositoryImpl implements NoteRepository {
   Future<void> deleteNote(String id) async {
     localDataSource.deleteNote(id);
   }
+
+  @override
+  Future<void> updateNote(Note note) async {
+    await localDataSource.updateNote(
+      NoteModel.fromEntity(note),
+    );
+  }
 }

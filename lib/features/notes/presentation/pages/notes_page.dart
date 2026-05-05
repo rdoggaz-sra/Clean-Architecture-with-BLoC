@@ -4,6 +4,7 @@ import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';
 import '../bloc/note_state.dart';
 import 'add_note_page.dart';
+import 'edit_note_page.dart';
 
 class NotesPage extends StatelessWidget {
   const NotesPage({super.key});
@@ -33,36 +34,52 @@ class NotesPage extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(note.content),
-                    trailing: IconButton(
-                      icon:
-                      const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () async {
-                        final confirm = await showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: const Text('Delete note?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, false),
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, true),
-                                child: const Text('Delete'),
-                              ),
-                            ],
-                          ),
-                        );
+                    trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // UPDATE BUTTON
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditNotePage(note: note),
+                            ),
+                          );
 
-                        if (confirm == true) {
-                          context
-                              .read<NoteBloc>()
-                              .add(DeleteNoteEvent(note.id));
-                        }
-                      },
-                    ),
+                          context.read<NoteBloc>().add(LoadNotes());
+                        },
+                      ),
+
+                      // DELETE BUTTON
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () async {
+                          final confirm = await showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Delete note?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            context.read<NoteBloc>().add(DeleteNoteEvent(note.id));
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                   ),
                 );
               },

@@ -13,3 +13,8 @@ class DeleteNoteEvent extends NoteEvent {
   final String id;
   DeleteNoteEvent(this.id);
 }
+
+class UpdateNoteEvent extends NoteEvent {
+  final Note note;
+  UpdateNoteEvent(this.note);
+}

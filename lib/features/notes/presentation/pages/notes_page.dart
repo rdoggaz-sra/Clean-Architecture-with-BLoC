@@ -78,10 +78,7 @@ class NotesPage extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (newContext) => BlocProvider.value(
-                value: context.read<NoteBloc>(),
-                child: const AddNotePage(),
-              ),
+              builder: (_) => const AddNotePage(),
             ),
           );
 

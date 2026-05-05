@@ -11,6 +11,8 @@ import 'features/notes/presentation/bloc/note_event.dart';
 import 'features/notes/presentation/pages/notes_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final dataSource = NoteLocalDataSource();
   final repository = NoteRepositoryImpl(dataSource);
 

@@ -1,13 +1,27 @@
 import '../models/note_model.dart';
+import '../../../../core/database/database_helper.dart';
 
 class NoteLocalDataSource {
-  final List<NoteModel> _notes = [];
+  final dbHelper = DatabaseHelper.instance;
 
-  List<NoteModel> getNotes() => _notes;
+  Future<List<NoteModel>> getNotes() async {
+    final db = await dbHelper.database;
+    final result = await db.query('notes');
 
-  void addNote(NoteModel note) => _notes.add(note);
+    return result.map((e) => NoteModel.fromMap(e)).toList();
+  }
 
-  void deleteNote(String id) {
-    _notes.removeWhere((note) => note.id == id);
+  Future<void> addNote(NoteModel note) async {
+    final db = await dbHelper.database;
+    await db.insert('notes', note.toMap());
+  }
+
+  Future<void> deleteNote(String id) async {
+    final db = await dbHelper.database;
+    await db.delete(
+      'notes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

@@ -1,5 +1,11 @@
 import 'package:get_it/get_it.dart';
 
+import 'features/categories/data/datasources/category_local_datasource.dart';
+import 'features/categories/data/repositories/category_repository_impl.dart';
+import 'features/categories/domain/repositories/category_repository.dart';
+import 'features/categories/domain/usecases/add_category.dart';
+import 'features/categories/domain/usecases/get_categories.dart';
+import 'features/categories/presentation/bloc/category_bloc.dart';
 import 'features/notes/data/datasources/note_local_datasource.dart';
 import 'features/notes/data/repositories/note_repository_impl.dart';
 import 'features/notes/domain/repositories/note_repository.dart';
@@ -14,10 +20,14 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Data source
   sl.registerLazySingleton(() => NoteLocalDataSource());
+  sl.registerLazySingleton(() => CategoryLocalDataSource());
 
   // register interface
   sl.registerLazySingleton<NoteRepository>(
         () => NoteRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<CategoryRepository>(
+        () => CategoryRepositoryImpl(sl()),
   );
 
   // Use cases
@@ -25,6 +35,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddNote(sl()));
   sl.registerLazySingleton(() => DeleteNote(sl()));
   sl.registerLazySingleton(() => UpdateNote(sl()));
+  sl.registerLazySingleton(() => GetCategories(sl()));
+  sl.registerLazySingleton(() => AddCategory(sl()));
 
   // Bloc
   sl.registerFactory(() => NoteBloc(
@@ -32,5 +44,10 @@ Future<void> init() async {
     addNote: sl(),
     deleteNote: sl(),
     updateNote: sl(),
+  ));
+
+  sl.registerFactory(() => CategoryBloc(
+    getCategories: sl(),
+    addCategory: sl(),
   ));
 }

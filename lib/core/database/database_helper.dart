@@ -20,18 +20,26 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
     );
   }
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE notes(
-        id TEXT PRIMARY KEY,
-        title TEXT,
-        content TEXT
-      )
-    ''');
+    CREATE TABLE notes(
+      id TEXT PRIMARY KEY,
+      title TEXT,
+      content TEXT,
+      categoryId TEXT
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE categories(
+      id TEXT PRIMARY KEY,
+      name TEXT
+    )
+  ''');
   }
 }

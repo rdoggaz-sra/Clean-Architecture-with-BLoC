@@ -5,4 +5,5 @@ abstract class NoteRepository {
   Future<void> addNote(Note note);
   Future<void> deleteNote(String id);
   Future<void> updateNote(Note note);
+  Future<List<Note>> getNotesByCategory(String categoryId);
 }

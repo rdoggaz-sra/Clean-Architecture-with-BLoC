@@ -29,6 +29,7 @@ class _EditNotePageState extends State<EditNotePage> {
       id: widget.note.id,
       title: _titleController.text.trim(),
       content: _contentController.text.trim(),
+      categoryId: widget.note.categoryId,
     );
 
     context.read<NoteBloc>().add(UpdateNoteEvent(updatedNote));

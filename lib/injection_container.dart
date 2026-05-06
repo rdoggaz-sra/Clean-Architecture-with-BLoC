@@ -13,6 +13,7 @@ import 'features/notes/domain/repositories/note_repository.dart';
 import 'features/notes/domain/usecases/add_note.dart';
 import 'features/notes/domain/usecases/delete_note.dart';
 import 'features/notes/domain/usecases/get_notes.dart';
+import 'features/notes/domain/usecases/get_notes_by_category.dart';
 import 'features/notes/domain/usecases/update_note.dart';
 import 'features/notes/presentation/bloc/note_bloc.dart';
 
@@ -40,6 +41,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateNote(sl()));
   sl.registerLazySingleton(() => GetCategories(sl()));
   sl.registerLazySingleton(() => AddCategory(sl()));
+  sl.registerLazySingleton(() => GetNotesByCategory(sl()));
 
   // Bloc
   sl.registerFactory(() => NoteBloc(
@@ -47,6 +49,7 @@ Future<void> init() async {
     addNote: sl(),
     deleteNote: sl(),
     updateNote: sl(),
+    getNotesByCategory: sl(),
   ));
 
   sl.registerFactory(() => CategoryBloc(

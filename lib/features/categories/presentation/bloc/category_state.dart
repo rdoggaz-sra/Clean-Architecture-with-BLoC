@@ -1,4 +1,4 @@
-import '../../domain/entity/category.dart';
+import '../../domain/entities/category.dart';
 
 abstract class CategoryState {}
 

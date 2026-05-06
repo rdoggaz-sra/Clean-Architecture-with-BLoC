@@ -5,6 +5,7 @@ class NoteModel extends Note {
     required super.id,
     required super.title,
     required super.content,
+    required super.categoryId,
   });
 
   factory NoteModel.fromMap(Map<String, dynamic> json) {
@@ -12,6 +13,7 @@ class NoteModel extends Note {
       id: json['id'],
       title: json['title'],
       content: json['content'],
+      categoryId: json['categoryId'],
     );
   }
 
@@ -20,6 +22,7 @@ class NoteModel extends Note {
       'id': id,
       'title': title,
       'content': content,
+      'categoryId': categoryId,
     };
   }
 
@@ -28,6 +31,7 @@ class NoteModel extends Note {
       id: note.id,
       title: note.title,
       content: note.content,
+      categoryId: note.categoryId,
     );
   }
 }

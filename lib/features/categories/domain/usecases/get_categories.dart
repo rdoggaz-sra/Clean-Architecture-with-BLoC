@@ -1,4 +1,4 @@
-import '../entity/category.dart';
+import '../entities/category.dart';
 import '../repositories/category_repository.dart';
 
 class GetCategories {

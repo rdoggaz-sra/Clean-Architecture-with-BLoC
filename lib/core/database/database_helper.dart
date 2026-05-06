@@ -21,6 +21,7 @@ class DatabaseHelper {
       path,
       version: 2,
       onCreate: _createDB,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -40,5 +41,18 @@ class DatabaseHelper {
       name TEXT
     )
   ''');
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE notes ADD COLUMN categoryId TEXT');
+
+      await db.execute('''
+      CREATE TABLE categories(
+        id TEXT PRIMARY KEY,
+        name TEXT
+      )
+    ''');
+    }
   }
 }

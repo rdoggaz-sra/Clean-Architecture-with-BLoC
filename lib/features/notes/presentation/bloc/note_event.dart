@@ -18,3 +18,9 @@ class UpdateNoteEvent extends NoteEvent {
   final Note note;
   UpdateNoteEvent(this.note);
 }
+
+class LoadNotesByCategory extends NoteEvent {
+  final String categoryId;
+
+  LoadNotesByCategory(this.categoryId);
+}

@@ -29,4 +29,9 @@ class NoteRepositoryImpl implements NoteRepository {
       NoteModel.fromEntity(note),
     );
   }
+
+  @override
+  Future<List<Note>> getNotesByCategory(String categoryId) async {
+    return await localDataSource.getNotesByCategory(categoryId);
+  }
 }

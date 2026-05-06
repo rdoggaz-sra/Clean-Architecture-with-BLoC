@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/add_note.dart';
 import '../../domain/usecases/delete_note.dart';
 import '../../domain/usecases/get_notes.dart';
+import '../../domain/usecases/get_notes_by_category.dart';
 import '../../domain/usecases/update_note.dart';
 import 'note_event.dart';
 import 'note_state.dart';
@@ -11,12 +12,14 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   final AddNote addNote;
   final DeleteNote deleteNote;
   final UpdateNote updateNote;
+  final GetNotesByCategory getNotesByCategory;
 
   NoteBloc({
     required this.getNotes,
     required this.addNote,
     required this.deleteNote,
-    required this.updateNote
+    required this.updateNote,
+    required this.getNotesByCategory,
   }) : super(NoteInitial()) {
 
     on<LoadNotes>((event, emit) async {
@@ -39,6 +42,11 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<UpdateNoteEvent>((event, emit) async {
       await updateNote(event.note);
       final notes = await getNotes();
+      emit(NoteLoaded(notes));
+    });
+
+    on<LoadNotesByCategory>((event, emit) async {
+      final notes = await getNotesByCategory(event.categoryId);
       emit(NoteLoaded(notes));
     });
   }

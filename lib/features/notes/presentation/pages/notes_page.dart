@@ -6,18 +6,39 @@ import '../bloc/note_state.dart';
 import 'add_note_page.dart';
 import 'edit_note_page.dart';
 
-class NotesPage extends StatelessWidget {
-  const NotesPage({super.key});
+class NotesPage extends StatefulWidget {
+  final String categoryId;
+  final String categoryName;
+
+  const NotesPage({
+    super.key,
+    required this.categoryId,
+    required this.categoryName,
+  });
+
+  @override
+  State<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NoteBloc>().add(
+      LoadNotesByCategory(widget.categoryId),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Notes')),
+      appBar: AppBar(title: Text(widget.categoryName)),
+
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (context, state) {
           if (state is NoteLoaded) {
             if (state.notes.isEmpty) {
-              return const Center(child: Text('No notes yet'));
+              return const Center(child: Text("No notes"));
             }
 
             return ListView.builder(
@@ -29,57 +50,35 @@ class NotesPage extends StatelessWidget {
                   margin:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: ListTile(
-                    title: Text(
-                      note.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    title: Text(note.title),
                     subtitle: Text(note.content),
                     trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // UPDATE BUTTON
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => EditNotePage(note: note),
-                            ),
-                          );
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => EditNotePage(note: note),
+                              ),
+                            );
 
-                          context.read<NoteBloc>().add(LoadNotes());
-                        },
-                      ),
+                            context.read<NoteBloc>().add(
+                              LoadNotesByCategory(widget.categoryId),
+                            );
+                          },
+                        ),
 
-                      // DELETE BUTTON
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          final confirm = await showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: const Text('Delete note?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: const Text('Delete'),
-                                ),
-                              ],
-                            ),
-                          );
-
-                          if (confirm == true) {
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
                             context.read<NoteBloc>().add(DeleteNoteEvent(note.id));
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -95,11 +94,15 @@ class NotesPage extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddNotePage(),
+              builder: (_) => AddNotePage(
+                categoryId: widget.categoryId,
+              ),
             ),
           );
 
-          context.read<NoteBloc>().add(LoadNotes());
+          context.read<NoteBloc>().add(
+            LoadNotesByCategory(widget.categoryId),
+          );
         },
         child: const Icon(Icons.add),
       ),

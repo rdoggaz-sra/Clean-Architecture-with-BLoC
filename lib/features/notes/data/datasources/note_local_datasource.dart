@@ -37,4 +37,16 @@ class NoteLocalDataSource {
       whereArgs: [note.id],
     );
   }
+
+  Future<List<NoteModel>> getNotesByCategory(String categoryId) async {
+    final db = await dbHelper.database;
+
+    final result = await db.query(
+      'notes',
+      where: 'categoryId = ?',
+      whereArgs: [categoryId],
+    );
+
+    return result.map((e) => NoteModel.fromMap(e)).toList();
+  }
 }

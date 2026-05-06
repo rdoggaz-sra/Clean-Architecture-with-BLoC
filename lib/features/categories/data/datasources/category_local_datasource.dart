@@ -2,7 +2,9 @@ import '../../../../core/database/database_helper.dart';
 import '../models/category_model.dart';
 
 class CategoryLocalDataSource {
-  final dbHelper = DatabaseHelper.instance;
+  final DatabaseHelper dbHelper;
+
+  CategoryLocalDataSource(this.dbHelper);
 
   Future<List<CategoryModel>> getCategories() async {
     final db = await dbHelper.database;

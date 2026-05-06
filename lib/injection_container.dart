@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import 'core/database/database_helper.dart';
 import 'features/categories/data/datasources/category_local_datasource.dart';
 import 'features/categories/data/repositories/category_repository_impl.dart';
 import 'features/categories/domain/repositories/category_repository.dart';
@@ -18,9 +19,11 @@ import 'features/notes/presentation/bloc/note_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  sl.registerLazySingleton(() => DatabaseHelper());
+
   // Data source
-  sl.registerLazySingleton(() => NoteLocalDataSource());
-  sl.registerLazySingleton(() => CategoryLocalDataSource());
+  sl.registerLazySingleton(() => NoteLocalDataSource(sl()));
+  sl.registerLazySingleton(() => CategoryLocalDataSource(sl()));
 
   // register interface
   sl.registerLazySingleton<NoteRepository>(

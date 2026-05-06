@@ -2,7 +2,9 @@ import '../models/note_model.dart';
 import '../../../../core/database/database_helper.dart';
 
 class NoteLocalDataSource {
-  final dbHelper = DatabaseHelper.instance;
+  final DatabaseHelper dbHelper;
+
+  NoteLocalDataSource(this.dbHelper);
 
   Future<List<NoteModel>> getNotes() async {
     final db = await dbHelper.database;
